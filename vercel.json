@@ -1,12 +1,9 @@
 {
   "version": 2,
-  "functions": {
-    "loader.py": { "runtime": "python3.9" }
-  },
+  "builds": [
+    { "src": "loader.py", "use": "@vercel/python" }
+  ],
   "routes": [
-    {
-      "src": "/([A-Za-z0-9_-]+)",
-      "dest": "loader.py?b64=$1"
-    }
+    { "src": "/(.*)", "dest": "/loader.py" }
   ]
 }

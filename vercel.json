@@ -1,6 +1,9 @@
 {
   "version": 2,
-  "functions": {
-    "api/loader.py": { "runtime": "python3.9" }
-  }
+  "builds": [
+    { "src": "loader.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/loader", "dest": "/loader.py" }
+  ]
 }

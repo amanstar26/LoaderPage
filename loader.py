@@ -1,18 +1,20 @@
 import base64
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import HTMLResponse
 
-def handler(request, response):
-    # get base64 from query
-    b64 = request.query.get("b64")
-    if not b64:
-        response.status_code = 400
-        return response.send("Missing base64 string")
+app = FastAPI()
 
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    return "Please provide a Base64 path in the URL."
+
+@app.get("/{b64}", response_class=HTMLResponse)
+async def loader(b64: str, request: Request):
     try:
         pad = "=" * (-len(b64) % 4)
         target = base64.urlsafe_b64decode(b64 + pad).decode("utf-8")
     except Exception:
-        response.status_code = 400
-        return response.send("Invalid base64 string")
+        return Response("Invalid Base64 string", status_code=400)
 
     html = f"""<!doctype html>
 <html lang="en">
@@ -37,5 +39,4 @@ const iv=setInterval(()=>{{t--;document.getElementById("t").textContent=t;if(t<=
 </script>
 </body>
 </html>"""
-    response.headers["Content-Type"] = "text/html"
-    return response.send(html)
+    return HTMLResponse(content=html)

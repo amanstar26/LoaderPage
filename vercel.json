@@ -1,12 +1,8 @@
 {
-  "version": 2,
-  "functions": {
-    "api/loader.py": {
-      "runtime": "python3.9"
-    }
-  },
   "routes": [
-    { "src": "/encode", "dest": "/api/loader.py" },
-    { "src": "/(.*)", "dest": "/api/loader.py" }
+    {
+      "src": "/([^/]+)",
+      "dest": "/api/loader.py?b64=$1"
+    }
   ]
 }

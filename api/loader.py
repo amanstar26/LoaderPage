@@ -1,13 +1,12 @@
 import base64
 
 def handler(request, response):
-    # get the base64 string from query
+    # get base64 from query
     b64 = request.query.get("b64")
     if not b64:
         response.status_code = 400
         return response.send("Missing base64 string")
 
-    # decode safely
     try:
         pad = "=" * (-len(b64) % 4)
         target = base64.urlsafe_b64decode(b64 + pad).decode("utf-8")
@@ -15,7 +14,6 @@ def handler(request, response):
         response.status_code = 400
         return response.send("Invalid base64 string")
 
-    # serve loader page with 5s countdown
     html = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -31,7 +29,7 @@ body{{display:flex;align-items:center;justify-content:center;min-height:100vh;ma
 <div>
 <div class="spinner"></div>
 <h2>Redirecting in <span id="t">5</span>s…</h2>
-<p>If it doesn’t work, <a id="manual" href="{target}">click here</a>.</p>
+<p>If it doesn’t work, <a href="{target}">click here</a>.</p>
 </div>
 <script>
 let t=5;

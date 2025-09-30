@@ -4,6 +4,6 @@
     { "src": "loader.py", "use": "@vercel/python" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/loader.py" }
+    { "src": "/loader", "dest": "/loader.py" }
   ]
 }

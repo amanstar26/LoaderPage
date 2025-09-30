@@ -1,7 +1,7 @@
 {
   "version": 2,
   "functions": {
-    "api/loader.py": { "runtime": "python3.9" }
+    "loader.py": { "runtime": "python3.9" }
   },
   "routes": [
     {

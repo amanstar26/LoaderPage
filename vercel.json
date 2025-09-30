@@ -4,6 +4,9 @@
     { "src": "loader.py", "use": "@vercel/python" }
   ],
   "routes": [
-    { "src": "/loader", "dest": "/loader.py" }
+    {
+      "src": "/([A-Za-z0-9_-]+)",
+      "dest": "/loader.py?b64=$1"
+    }
   ]
 }

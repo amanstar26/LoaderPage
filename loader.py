@@ -1,20 +1,21 @@
 import base64
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from mangum import Mangum
 
 app = FastAPI()
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    return "Please provide a Base64 path in the URL."
+    return "Please append Base64 string in the path."
 
 @app.get("/{b64}", response_class=HTMLResponse)
-async def loader(b64: str, request: Request):
+async def loader(b64: str):
     try:
         pad = "=" * (-len(b64) % 4)
         target = base64.urlsafe_b64decode(b64 + pad).decode("utf-8")
     except Exception:
-        return Response("Invalid Base64 string", status_code=400)
+        return HTMLResponse("Invalid Base64 string", status_code=400)
 
     html = f"""<!doctype html>
 <html lang="en">
@@ -40,3 +41,6 @@ const iv=setInterval(()=>{{t--;document.getElementById("t").textContent=t;if(t<=
 </body>
 </html>"""
     return HTMLResponse(content=html)
+
+# Mangum handler for Vercel
+handler = Mangum(app)

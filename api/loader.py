@@ -1,13 +1,13 @@
 import base64
 
 def handler(request, response):
-    # Get the base64 string from query
+    # get the base64 string from query
     b64 = request.query.get("b64")
     if not b64:
         response.status_code = 400
         return response.send("Missing base64 string")
 
-    # Decode base64 safely
+    # decode safely
     try:
         pad = "=" * (-len(b64) % 4)
         target = base64.urlsafe_b64decode(b64 + pad).decode("utf-8")
@@ -15,7 +15,7 @@ def handler(request, response):
         response.status_code = 400
         return response.send("Invalid base64 string")
 
-    # Serve loader page with 5s countdown
+    # serve loader page with 5s countdown
     html = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -35,7 +35,7 @@ body{{display:flex;align-items:center;justify-content:center;min-height:100vh;ma
 </div>
 <script>
 let t=5;
-const iv=setInterval(()=>{t--;document.getElementById("t").textContent=t;if(t<=0){clearInterval(iv);window.location.href="{target}";}},1000);
+const iv=setInterval(()=>{{t--;document.getElementById("t").textContent=t;if(t<=0){{clearInterval(iv);window.location.href="{target}";}}}},1000);
 </script>
 </body>
 </html>"""

@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    return "Please append Base64 string in the path."
+    return "Append the Base64 string in the path."
 
 @app.get("/{b64}", response_class=HTMLResponse)
 async def loader(b64: str):
@@ -42,5 +42,5 @@ const iv=setInterval(()=>{{t--;document.getElementById("t").textContent=t;if(t<=
 </html>"""
     return HTMLResponse(content=html)
 
-# Mangum handler for Vercel
+# Vercel serverless entrypoint
 handler = Mangum(app)

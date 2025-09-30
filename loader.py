@@ -1,10 +1,12 @@
 import base64
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 app = FastAPI()
 
-# Fake 404 page for invalid access
+# Fake 404 page
 def fake_404_page():
     html = """<!DOCTYPE html>
 <html lang="en">
@@ -36,19 +38,21 @@ p { font-size: 18px; }
 </html>"""
     return HTMLResponse(content=html, status_code=404)
 
+# Override default 404 handler
+@app.exception_handler(StarletteHTTPException)
+async def custom_404_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        return fake_404_page()
+    return HTMLResponse(content=str(exc.detail), status_code=exc.status_code)
+
 @app.get("/{b64}", response_class=HTMLResponse)
 async def loader(b64: str):
-    # Security: Only allow URL-safe Base64 strings
+    # Only allow URL-safe Base64 strings
     try:
         pad = "=" * (-len(b64) % 4)
         target = base64.urlsafe_b64decode(b64 + pad).decode("utf-8")
     except Exception:
-        # Invalid Base64 → show fake 404
         return fake_404_page()
-
-    # Optional: extra security check (e.g., only allow links to certain domains)
-    # if not target.startswith("https://adrinolinks.com/"):
-    #     return fake_404_page()
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -105,10 +109,9 @@ const iv = setInterval(() => {{
 </script>
 </body>
 </html>"""
-
     return HTMLResponse(content=html)
 
-# Local development server
+# Local dev server
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)

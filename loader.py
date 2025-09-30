@@ -1,19 +1,23 @@
 import base64
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
-def handler(request, response):
-    b64 = request.query.get("b64")
-    if not b64:
-        response.status_code = 400
-        return response.send("Missing Base64 string")
+app = FastAPI()
 
+@app.get("/")
+def root():
+    return {"message": "Use /{base64} path to redirect."}
+
+@app.get("/{b64}", response_class=HTMLResponse)
+def loader(b64: str):
     try:
         pad = "=" * (-len(b64) % 4)
-        target = base64.urlsafe_b64decode(b64 + pad).decode("utf-8")
+        target = base64.urlsafe_b64decode(b64 + pad).decode()
     except Exception:
-        response.status_code = 400
-        return response.send("Invalid Base64 string")
+        return HTMLResponse("Invalid Base64 string", status_code=400)
 
-    html = f"""<!DOCTYPE html>
+    html = f"""
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -35,7 +39,11 @@ let t=5;
 const iv=setInterval(()=>{{t--;document.getElementById("t").textContent=t;if(t<=0){{clearInterval(iv);window.location.href="{target}";}}}},1000);
 </script>
 </body>
-</html>"""
+</html>
+"""
+    return HTMLResponse(content=html)
 
-    response.headers["Content-Type"] = "text/html"
-    return response.send(html)
+# Local development server
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8080)

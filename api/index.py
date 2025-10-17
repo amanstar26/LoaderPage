@@ -8,7 +8,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 app = FastAPI()
 
 # ---------------- CONFIG ----------------
-DB_PATH = "tokens.db"
+DB_PATH = "/tmp/tokens.db"
 RECAPTCHA_SITE_KEY = "6LdRye0rAAAAAJdv5WzcynyTqL1MMGxtQ1MPHcWw"
 RECAPTCHA_SECRET_KEY = "6LdRye0rAAAAAFbkHSf-lNCeK3Ap_zDTxlXOr_A1"
 

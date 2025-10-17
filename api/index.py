@@ -4,7 +4,7 @@ import requests
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
-
+from fastapi import Form
 app = FastAPI()
 
 # ---------------- CONFIG ----------------
@@ -111,7 +111,10 @@ button {{ margin-top:20px; background:#fff; color:#2575fc; border:none; padding:
     return HTMLResponse(content=html)
 
 @app.post("/verify")
-async def verify(token: str = Form(...), g_recaptcha_response: str = Form(...)):
+async def verify(
+    token: str = Form(...),
+    g_recaptcha_response: str = Form(..., alias="g-recaptcha-response")  # 👈 this is the fix
+):
     verify_url = "https://www.google.com/recaptcha/api/siteverify"
     data = {"secret": RECAPTCHA_SECRET_KEY, "response": g_recaptcha_response}
     res = requests.post(verify_url, data=data).json()

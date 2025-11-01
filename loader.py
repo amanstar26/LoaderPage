@@ -94,7 +94,6 @@ a {{ color: #fff; text-decoration: underline; }}
 <div class="loader-container">
   <div class="spinner"></div>
   <h1>Redirecting in <span class="countdown" id="t">5</span>s...</h1>
-  <p>If it doesn’t redirect automatically, <a href="{target}">click here</a></p>
 </div>
 <script>
 let t = 5;

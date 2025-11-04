@@ -93,10 +93,10 @@ a {{ color: #fff; text-decoration: underline; }}
 <body>
 <div class="loader-container">
   <div class="spinner"></div>
-  <h1>Redirecting in <span class="countdown" id="t">5</span>s...</h1>
+  <h1>Redirecting in <span class="countdown" id="t">3</span>s...</h1>
 </div>
 <script>
-let t = 5;
+let t = 3;
 const iv = setInterval(() => {{
     t--;
     document.getElementById('t').textContent = t;

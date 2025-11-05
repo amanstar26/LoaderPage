@@ -14,3 +14,5 @@ https://adrinolinks.com/BgXZug
 
 # I will reply with a secure link like:
 https://demon-lord.vercel.app/aHR0cHM6Ly9hZHJpbm9saW5rcy5jb20vQmdYWndn
+
+You Can Directly Host on the Vercel
